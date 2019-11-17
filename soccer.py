@@ -40,7 +40,7 @@ class SoccerEnv(discrete.DiscreteEnv):
         W = 3
         Stick = 4
 
-    def __init__(self):
+    def __init__(self, random=True, s_i=17):
 
         self.desc = np.asarray(MAP, dtype='c')
 
@@ -92,8 +92,12 @@ class SoccerEnv(discrete.DiscreteEnv):
                                     # Add entries in the transition matrix for
                                     for next_state, reward, done in transitions:
                                         P[state][action].append((p, next_state, reward, done))
-        isd /= isd.sum()
 
+        if random:
+            isd /= isd.sum()
+        else:
+            isd = np.zeros(num_states)
+            isd[s_i] = 1
         discrete.DiscreteEnv.__init__(self, num_states, num_actions, P, isd)
         pass
 
